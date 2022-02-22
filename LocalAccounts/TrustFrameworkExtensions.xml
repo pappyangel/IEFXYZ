@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="AZANB2C.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://AZANB2C.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>AZANB2C.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkLocalization</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="groups">
+       <DisplayName>Comma delimited list of group names</DisplayName>
+        <DataType>stringCollection</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="roles">
+        <DisplayName>Comma delimited list of AppRoleAssignment names</DisplayName>
+        <DataType>stringCollection</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+         <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">6575ec0c-87e7-4e9b-bb30-7fc1dd64b5e5</Item>
+            <Item Key="IdTokenAudience">a5b23eeb-40ff-41af-9ade-001c83392d45</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="6575ec0c-87e7-4e9b-bb30-7fc1dd64b5e5" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="a5b23eeb-40ff-41af-9ade-001c83392d45" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+<ClaimsProvider>
+    <DisplayName>REST APIs</DisplayName>
+    <TechnicalProfiles>
+    <TechnicalProfile Id="GetUserAppRoleAssignment">
+        <DisplayName>Retrieves security groups assigned to the user</DisplayName>
+        <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+        <Metadata>       
+        <Item Key="ServiceUrl">https://getb2croleassignments.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph?</Item>        
+        <Item Key="AuthenticationType">None</Item>
+        <Item Key="SendClaimsIn">Body</Item>
+        <Item Key="AllowInsecureAuthInProduction">true</Item>
+        <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+        </Metadata>
+        <InputClaims>
+          <InputClaim Required="true" ClaimTypeReferenceId="objectId" />
+          <!-- this B2C tenant id -->        
+          <!-- <InputClaim ClaimTypeReferenceId="tenantId" DefaultValue="{Policy:TenantObjectId}" /> -->
+          <InputClaim ClaimTypeReferenceId="tenantId" DefaultValue="2bda720e-ce0c-4f29-9688-0de0eeeb1556" />
+          <!-- The App we're signing in to -->
+          <!-- <InputClaim ClaimTypeReferenceId="client_id" PartnerClaimType="clientId" i.e. WebApp DefaultValue="{OIDC:ClientId}" /> -->
+          <InputClaim ClaimTypeReferenceId="client_id" PartnerClaimType="clientId"  DefaultValue="50d43ba7-96ce-4c5a-b37a-30a41ccee66d" />
+          <!-- specify that we want both roles and groups back -->
+          <InputClaim ClaimTypeReferenceId="scope" DefaultValue="roles groups" AlwaysUseDefaultValue="true" />
+        </InputClaims>
+        <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="roles" />
+        <OutputClaim ClaimTypeReferenceId="groups" />
+        <!-- <OutputClaim ClaimTypeReferenceId="tenantId" DefaultValue="{Policy:TenantObjectId}" AlwaysUseDefaultValue="true" /> -->
+        <OutputClaim ClaimTypeReferenceId="tenantId" DefaultValue="2bda720e-ce0c-4f29-9688-0de0eeeb1556" AlwaysUseDefaultValue="true" />
+        </OutputClaims>
+        <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+    </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+
+
+  </ClaimsProviders>
+
+    <!--UserJourneys>
+	
+	</UserJourneys-->
+
+</TrustFrameworkPolicy>
