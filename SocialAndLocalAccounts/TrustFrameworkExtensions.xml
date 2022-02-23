@@ -4,16 +4,28 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
   PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" 
+   TenantId="AZANB2C.onmicrosoft.com" 
   PolicyId="B2C_1A_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  PublicPolicyUri="http://AZANB2C.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
   
   <BasePolicy>
-    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+   <TenantId>AZANB2C.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkLocalization</PolicyId>
   </BasePolicy>
- <BuildingBlocks>
-
+  
+  <BuildingBlocks>
+    <ClaimsSchema>
+        <ClaimType Id="groups">
+        <DisplayName>Comma delimited list of group names</DisplayName>
+          <DataType>stringCollection</DataType>
+          <UserInputType>Readonly</UserInputType>
+        </ClaimType>
+        <ClaimType Id="roles">
+          <DisplayName>Comma delimited list of AppRoleAssignment names</DisplayName>
+          <DataType>stringCollection</DataType>
+          <UserInputType>Readonly</UserInputType>
+        </ClaimType>
+    </ClaimsSchema>
   </BuildingBlocks>
 
   <ClaimsProviders>

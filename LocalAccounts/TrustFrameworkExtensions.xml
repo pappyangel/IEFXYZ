@@ -26,7 +26,6 @@
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
-
   </BuildingBlocks>
 
   <ClaimsProviders>
